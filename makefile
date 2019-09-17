@@ -12,7 +12,7 @@ _DEPS = mul_cpx_separatefile.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 .PHONY: all
-all: time_sum mainfile separatefile
+all: time_sum mainfile separatefile inlined
 
 # Rule to generate object files:
 # $(ODIR)/%.o: %.c $(DEPS)
@@ -21,6 +21,9 @@ $(ODIR)/time_sum.o: time_sum.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/mainfile.o: mainfile.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(ODIR)/inlined.o: inlined.c 
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/mul_cpx_separatefile.o: mul_cpx_separatefile.c
@@ -36,9 +39,12 @@ time_sum: $(ODIR)/time_sum.o
 mainfile: $(ODIR)/mainfile.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+inlined: $(ODIR)/inlined.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 separatefile: $(ODIR)/separatefile.o $(ODIR)/mul_cpx_separatefile.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean # Avoid conflict with a file of the same name
 clean:
-	rm -f $(ODIR)/*.o time_sum mainfile separatefile $(IDIR)/*~
+	rm -f $(ODIR)/*.o time_sum mainfile separatefile inlined $(IDIR)/*~

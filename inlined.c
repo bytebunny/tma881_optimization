@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "mul_cpx_separatefile.h"
 
 int main(){
   #define SIZE 30000
@@ -12,9 +11,8 @@ int main(){
     bs[ix] = 1; bs[ix+1] = 1;
     cs[ix] = 1; cs[ix+1] = 1;
     
-    mul_cpx_separatefile( &as[ix], &as[ix + 1], \
-                          &bs[ix], &bs[ix + 1], \
-                          &cs[ix], &cs[ix + 1] );    
+    as[ix] = bs[ix] * cs[ix] - bs[ix + 1] * cs[ix + 1];
+    as[ix + 1] = bs[ix] * cs[ix + 1] + bs[ix + 1] * cs[ix];
   }
   
   return(0);

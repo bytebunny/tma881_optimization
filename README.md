@@ -16,3 +16,24 @@ Parametric study of **optimization flags**:
 
 Example of compilation to assembly code for `-O0`:
 `gcc time_sum.c -S -O0 -o time_sum_O0.s`
+
+## Inlining
+
+Benchmarking of `mainfile` program:
+![mainfile benchmark](./img/benchmark_mainfile.png)
+
+Benchmarking of `separatefile` program:
+![separatefile benchmark](./img/benchmark_separatefile.png)
+
+Benchmarking of `inlined` program:
+![inlined benchmark](./img/benchmark_inlined.png)
+
+### `nm` tool
+
+When examining the first two executables for symbols that correspond to
+`mul_cpx_mainfile` and `mul_cpx_separatefile`, they can be found in
+both cases:
+
+`0000000000401120 T mul_cpx_mainfile`
+
+`00000000004011a0 T mul_cpx_separatefile`
