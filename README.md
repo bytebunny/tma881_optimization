@@ -18,7 +18,6 @@ Example of compilation to assembly code for `-O0`:
 `gcc time_sum.c -S -O0 -o time_sum_O0.s`
 
 ## Inlining
-
 Benchmarking of `mainfile` program:
 ![mainfile benchmark](./img/benchmark_mainfile.png)
 
@@ -29,7 +28,6 @@ Benchmarking of `inlined` program:
 ![inlined benchmark](./img/benchmark_inlined.png)
 
 ### `nm` tool
-
 When examining the first two executables for symbols that correspond to
 `mul_cpx_mainfile` and `mul_cpx_separatefile`, they can be found in
 both cases:
@@ -37,3 +35,30 @@ both cases:
 `0000000000401120 T mul_cpx_mainfile`
 
 `00000000004011a0 T mul_cpx_separatefile`
+
+## Locality
+The time of row and column summations compiled with `-O0, -march=native` flags was:
+
+- Average (from 10000) elapsed time of **row** summation: 2.407893455 msec.
+- Average (from 10000) elapsed time of **column** summation: 2.905988410 msec.
+
+### Loop unrolling
+Partially unrolling the loops by 5 elements improved the time **for the column
+summation only**:
+
+- Average (from 10000) elapsed time of **row** summation: 2.454047617 msec.
+- Average (from 10000) elapsed time of **column** summation: 2.637670321 msec.
+
+
+The original code compiled with 2nd level optimization (`-O2`) gave faster resuts:
+
+- Average (from 10000) elapsed time of **row** summation: 1.031412517 msec.
+- Average (from 10000) elapsed time of **column** summation: 1.420934522 msec.
+
+### Loop unrolling
+Partially unrolling the loops by 5 elements improved the time **for both cases**:
+
+- Average (from 10000) elapsed time of **row** summation: 1.027971991 msec.
+- Average (from 10000) elapsed time of **column** summation: 1.336912766 msec.
+
+However, this approach gave no speed-up for a smaller number of repetitions (500).
