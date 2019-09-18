@@ -27,6 +27,11 @@ Benchmarking of `separatefile` program:
 Benchmarking of `inlined` program:
 ![inlined benchmark](./img/benchmark_inlined.png)
 
+The `separatefile` program is **slower** possibly because the compiler
+misses the information about the program, needed to optimize the
+code (e.g. automatic inlining).
+To remedy this, one might try to enable **link-time optimizer**.
+
 ### `nm` tool
 When examining the first two executables for symbols that correspond to
 `mul_cpx_mainfile` and `mul_cpx_separatefile`, they can be found in

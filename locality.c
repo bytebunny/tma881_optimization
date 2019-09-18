@@ -18,8 +18,7 @@ int main(){
   struct timespec t_start, t_end;
   int n_iter = 10000; // How many times summation needs to be repeated.
   double t_elapsed_avg;
-  /* double m[SIZE*SIZE]; // Requires 7.6 MiB of memory -> can fit on stack. */
-  /* double *mp = m; // Point to the 1st element of array. */
+
   double * mentries = (double*) malloc(sizeof(double) * SIZE*SIZE);
   double ** m = (double**) malloc(sizeof(double*) * SIZE);
   for ( size_t ix = 0, jx = 0; ix < SIZE; ++ix, jx+=SIZE )
@@ -28,15 +27,13 @@ int main(){
   // Initialize matrix:
   for ( size_t ix = 0; ix < SIZE; ++ix  ) {
     for ( size_t jx = 0; jx < SIZE; ++jx  ) {
-//      m[ ix * SIZE + jx ] = (double)jx; // Sum of each row is SIZE*(SIZE+1)/2, sum of col i={0,SIZE-1} is i*SIZE;
-      m[ix][jx] = (double)jx;
+      m[ix][jx] = (double)jx; // Sum of each row is SIZE*(SIZE+1)/2, sum of col i={0,SIZE-1} is i*SIZE;
     }
   }
   
   /////////////////////////////////// time row summation ///////////////////////
   timespec_get(&t_start, TIME_UTC);
   for ( int iter = 0; iter < n_iter; ++iter ){
-    //  row_sums( sums, &mp, SIZE, SIZE );
     row_sums( sums, m, SIZE, SIZE );
   }
   timespec_get(&t_end, TIME_UTC);
