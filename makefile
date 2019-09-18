@@ -48,7 +48,7 @@ mainfile: $(ODIR)/mainfile.o
 inlined: $(ODIR)/inlined.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-separatefile: $(ODIR)/separatefile.o $(ODIR)/mul_cpx_separatefile.o
+separatefile: $(ODIR)/separatefile.o $(ODIR)/mul_cpx_separatefile.o $(DEPS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 ## Locality

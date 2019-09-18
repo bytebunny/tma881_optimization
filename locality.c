@@ -42,7 +42,8 @@ int main(){
   t_elapsed_avg = ( (double)(t_end.tv_sec - t_start.tv_sec) +  \
                     ((double)(t_end.tv_nsec - t_start.tv_nsec)/1000000000L) \
                     ) / (double)n_iter;
-  printf("Average (from %d) elapsed time of row summation: %.9lf msec.\n", n_iter, t_elapsed_avg*1e3);
+  printf("Average (from %d) elapsed time of row summation: %.9lf msec.\n",
+         n_iter, t_elapsed_avg*1e3);
 
   /////////////////////////////////// time col summation ///////////////////////
   timespec_get(&t_start, TIME_UTC);
@@ -55,7 +56,8 @@ int main(){
   t_elapsed_avg = ( (double)(t_end.tv_sec - t_start.tv_sec) + \
                     ((double)(t_end.tv_nsec - t_start.tv_nsec)/1000000000L) \
                     ) / (double)n_iter;
-  printf("Average (from %d) elapsed time of column summation: %.9lf msec.\n", n_iter, t_elapsed_avg*1e3);
+  printf("Average (from %d) elapsed time of column summation: %.9lf msec.\n",
+         n_iter, t_elapsed_avg*1e3);
 
 
   free(m);
@@ -69,38 +71,30 @@ int main(){
 
 void row_sums( double * sums,
                const double ** matrix,
-//               double ** matrix,
                size_t nrs,
                size_t ncs ) {
-  for ( size_t ix=0; ix < nrs; ++ix ) {
-    double sum = 0;
-    for ( size_t jx=0; jx < ncs; jx += 5 ){
-      sum += matrix[ix][jx];
-      sum += matrix[ix][jx + 1];
-      sum += matrix[ix][jx + 2];
-      sum += matrix[ix][jx + 3];
-      sum += matrix[ix][jx + 4];
-    }
-//      sum += *(*(matrix) + ncs * ix + jx);
-    sums[ix] = sum;
-//    printf("%lf\n", sums[ix]);
+
+  for ( size_t ix=0; ix < nrs; ++ix ){
+    double sum0 = 0, sum1 = 0, sum2 = 0, sum3 = 0;
+    for ( size_t jx=0; jx < ncs; jx += 4 ){
+      sum0 += matrix[ix][jx    ];
+      sum1 += matrix[ix][jx + 1];
+      sum2 += matrix[ix][jx + 2];
+      sum3 += matrix[ix][jx + 3];
+      }
+    sums[ix] = sum0 + sum1 + sum2 + sum3;
   }
 }
 
 void col_sums( double * sums,
                const double ** matrix,
-//               double ** matrix,
                size_t nrs,
                size_t ncs ) {
-  for ( size_t jx=0; jx < ncs; ++jx ) {
-    double sum = 0;
-    for ( size_t ix=0; ix < nrs; ix += 5 ){
-      sum += matrix[ix][jx];
-      sum += matrix[ix + 1][jx];
-      sum += matrix[ix + 2][jx];
-      sum += matrix[ix + 3][jx];
-      sum += matrix[ix + 4][jx];
-      }
-    sums[jx] = sum;
-  }
+
+  for ( size_t ix=0; ix < nrs; ++ix )
+    sums[ix] = 0;
+
+  for ( size_t ix=0; ix < nrs; ++ix )
+    for ( size_t jx=0; jx < ncs; ++jx )
+      sums[jx] += matrix[ix][jx];
 }
