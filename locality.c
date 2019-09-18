@@ -3,12 +3,12 @@
 #include <time.h>
 
 void row_sums( double * sums,
-               double ** matrix,
+               const double ** matrix,
                size_t nrs,
                size_t ncs );
 
 void col_sums( double * sums,
-               double ** matrix,
+               const double ** matrix,
                size_t nrs,
                size_t ncs );
 
@@ -34,7 +34,7 @@ int main(){
   /////////////////////////////////// time row summation ///////////////////////
   timespec_get(&t_start, TIME_UTC);
   for ( int iter = 0; iter < n_iter; ++iter ){
-    row_sums( sums, m, SIZE, SIZE );
+    row_sums( sums, (const double**)m, SIZE, SIZE );
   }
   timespec_get(&t_end, TIME_UTC);
 
@@ -47,7 +47,7 @@ int main(){
   /////////////////////////////////// time col summation ///////////////////////
   timespec_get(&t_start, TIME_UTC);
   for ( int iter = 0; iter < n_iter; ++iter ){
-    col_sums( sums, m, SIZE, SIZE );
+    col_sums( sums, (const double**)m, SIZE, SIZE );
   }
   timespec_get(&t_end, TIME_UTC);
 
@@ -68,8 +68,8 @@ int main(){
 
 
 void row_sums( double * sums,
-//               const double ** matrix,
-               double ** matrix,
+               const double ** matrix,
+//               double ** matrix,
                size_t nrs,
                size_t ncs ) {
   for ( size_t ix=0; ix < nrs; ++ix ) {
@@ -88,8 +88,8 @@ void row_sums( double * sums,
 }
 
 void col_sums( double * sums,
-//               const double ** matrix,
-               double ** matrix,
+               const double ** matrix,
+//               double ** matrix,
                size_t nrs,
                size_t ncs ) {
   for ( size_t jx=0; jx < ncs; ++jx ) {
