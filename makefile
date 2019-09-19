@@ -28,10 +28,10 @@ $(ODIR)/inlined.o: inlined.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/mul_cpx_separatefile.o: mul_cpx_separatefile.c
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -flto -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/separatefile.o: separatefile.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) -I$(IDIR)
+	$(CC) -flto -c -o $@ $< $(CFLAGS) -I$(IDIR)
 
 ## Locality
 $(ODIR)/locality.o: locality.c 
@@ -49,7 +49,7 @@ inlined: $(ODIR)/inlined.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 separatefile: $(ODIR)/separatefile.o $(ODIR)/mul_cpx_separatefile.o $(DEPS)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	$(CC) -flto -o $@ $^ $(CFLAGS) $(LIBS)
 
 ## Locality
 locality: $(ODIR)/locality.o

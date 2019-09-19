@@ -17,20 +17,37 @@ Parametric study of **optimization flags**:
 Example of compilation to assembly code for `-O0`:
 `gcc time_sum.c -S -O0 -o time_sum_O0.s`
 
+
 ## Inlining
-Benchmarking of `mainfile` program:
-![mainfile benchmark](./img/benchmark_mainfile.png)
+Benchmarking of three programs when repeating multiplications 100,000 times
+gives the following elapsed timings:
 
-Benchmarking of `separatefile` program:
-![separatefile benchmark](./img/benchmark_separatefile.png)
+- `mainfile`: 0.000186 msec.
 
-Benchmarking of `inlined` program:
-![inlined benchmark](./img/benchmark_inlined.png)
+- `inlined`: 0.000180 msec.
 
-The `separatefile` program is **slower** possibly because the compiler
+- `separatefile`: 15834.270968 msec.
+
+The `separatefile` program is **much slower** possibly because the compiler
 misses the information about the program, needed to optimize the
 code (e.g. automatic inlining).
+
 To remedy this, one might try to enable **link-time optimizer**.
+For GCC this can be enabled with `-flto` flag[^1]:
+> When invoked with source code, it generates GIMPLE (one of GCC’s internal representations) 
+> and writes it to special ELF sections in the object file. 
+> When the object files are linked together, all the function bodies are read from these ELF
+> sections and instantiated as if they had been part of the same translation unit.
+
+> To use the link-time optimizer, -flto and optimization options should be
+> **specified at compile time and during the final link**.
+> It is recommended that you **compile all the files** participating in the same link with
+> the same options and also **specify those options at link time**.
+
+[^1]: [Using the GNU Compiler Collection (GCC)](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+
+The new execution time for `separatefile` program is 0.000187 msec, i.e. the same as for
+the **inlined** counterpart.
 
 ### `nm` tool
 When examining the first two executables for symbols that correspond to
@@ -40,6 +57,7 @@ both cases:
 0000000000401120 T mul_cpx_mainfile
 00000000004011a0 T mul_cpx_separatefile
 ```
+
 
 ## Locality
 The time of row and column summations compiled with `-O0, -march=native` flags was:
@@ -72,12 +90,11 @@ can be done inside the outer loop) the timings become as follows:
 - Average (from 10,000) elapsed time of **column** summation: 0.560611644 msec.
 
 At the first glance, this is a surprising result.
-However, if one takes into account the part of the lecture on **Hardware architecture**
+However, if one takes into account the part of the lecture on **hardware architecture**
 that concerns **pipelining** and **data blocking**,
-it is possible to realize that that in the case of the **row** summation the
-same element in `sums` array is being accessed within the inner loop, and the
-CPU cannot know that the instructions of adding elements within the inner loop
-are _independent_:
+it is possible to realize that that in the case of the **row** summation writing into 
+the same element of `sums` array is being done within the inner loop, and the
+CPU cannot know that the instructions are _independent_:
 ```
 for ( size_t ix=0; ix < nrs; ++ix ){
     sums[ix] = 0; // Initialize sum.
@@ -108,3 +125,7 @@ As a result, the **row** summation procedure is faster again:
 
 - Average (from 10,000) elapsed time of row summation: 0.321366179 msec.
 - Average (from 10,000) elapsed time of column summation: 0.476664307 msec.
+
+### To-do list
+- [ ] Try to see from the assembly code how the sequencing is done in the row and 
+      column summation cases.
