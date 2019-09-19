@@ -44,7 +44,7 @@ For GCC this can be enabled with `-flto` flag<sup>[1](#myfootnote1)</sup>:
 > It is recommended that you **compile all the files** participating in the same link with
 > the same options and also **specify those options at link time**.
 
-<a name="myfootnote1">1</a>:: [Using the GNU Compiler Collection (GCC)](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+<a name="myfootnote1">1</a>: [Using the GNU Compiler Collection (GCC)](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
 
 The new execution time for `separatefile` program is 0.000187 msec, i.e. the same as for
 the **inlined** counterpart.
@@ -129,3 +129,25 @@ As a result, the **row** summation procedure is faster again:
 ### To-do list
 - [ ] Try to see from the assembly code how the sequencing is done in the row and 
       column summation cases.
+
+
+## Indirect addressing
+Benchmarking with `-O0` flag:
+
+- Procedure **1**: 35.713863 msec.
+- Procedure **2**: 22.647007 msec.
+- **Alternative** procedure: 15.258435 msec.
+
+Benchmarking with `-O2` flag:
+
+- Procedure **1**: 33.492691 msec.
+- Procedure **2**: 13.831841 msec.
+- **Alternative** procedure: 10.758333 msec.
+
+Procedure **1** is considerably slower than the rest, probably due to cache misses
+due to large jumps in indices.
+Procedures **2** and the **alternative** one have very similar elapsed times
+and the algorithms, except that the former makes use of the additional vector
+to look up indices (that are already known within the loop).
+Therefore, the additional memory access is probably responsible for partly breaking
+the pipeline and increasing the runtime.

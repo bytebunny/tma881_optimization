@@ -12,7 +12,9 @@ _DEPS = mul_cpx_separatefile.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 .PHONY: all
-all: time_sum mainfile separatefile inlined locality
+all: time_sum mainfile separatefile inlined locality \
+	indirect_addressing_1 indirect_addressing_2 \
+	indirect_addressing_alt
 
 # Rule to generate object files:
 # $(ODIR)/%.o: %.c $(DEPS)
@@ -37,6 +39,16 @@ $(ODIR)/separatefile.o: separatefile.c $(DEPS)
 $(ODIR)/locality.o: locality.c 
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+## Indirect addressing
+$(ODIR)/indirect_addressing_1.o: indirect_addressing_1.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(ODIR)/indirect_addressing_2.o: indirect_addressing_2.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(ODIR)/indirect_addressing_alt.o: indirect_addressing_alt.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
 
 time_sum: $(ODIR)/time_sum.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
@@ -55,8 +67,19 @@ separatefile: $(ODIR)/separatefile.o $(ODIR)/mul_cpx_separatefile.o $(DEPS)
 locality: $(ODIR)/locality.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+## Indirect addressing:
+indirect_addressing_1: $(ODIR)/indirect_addressing_1.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+indirect_addressing_2: $(ODIR)/indirect_addressing_2.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+indirect_addressing_alt: $(ODIR)/indirect_addressing_alt.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 
 .PHONY: clean # Avoid conflict with a file of the same name
 clean:
 	rm -f $(ODIR)/*.o time_sum mainfile separatefile inlined \
-		  locality $(IDIR)/*~
+		  locality indirect_addressing_1 indirect_addressing_2 \
+		  indirect_addressing_alt $(IDIR)/*~
