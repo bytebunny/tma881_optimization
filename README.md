@@ -33,7 +33,7 @@ misses the information about the program, needed to optimize the
 code (e.g. automatic inlining).
 
 To remedy this, one might try to enable **link-time optimizer**.
-For GCC this can be enabled with `-flto` flag[^1]:
+For GCC this can be enabled with `-flto` flag<sup>[1](#myfootnote1)</sup>:
 > When invoked with source code, it generates GIMPLE (one of GCC’s internal representations) 
 > and writes it to special ELF sections in the object file. 
 > When the object files are linked together, all the function bodies are read from these ELF
@@ -44,7 +44,7 @@ For GCC this can be enabled with `-flto` flag[^1]:
 > It is recommended that you **compile all the files** participating in the same link with
 > the same options and also **specify those options at link time**.
 
-[^1]: [Using the GNU Compiler Collection (GCC)](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
+<a name="myfootnote1">1</a>:: [Using the GNU Compiler Collection (GCC)](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html)
 
 The new execution time for `separatefile` program is 0.000187 msec, i.e. the same as for
 the **inlined** counterpart.
