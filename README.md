@@ -155,17 +155,17 @@ the pipeline and increasing the runtime.
 
 ## Writing to HDD and SSD
 - Writing and reading to **HDD**:
-[Benchmark writing hdd](./img/benchmark_write_hdd.png)
+![Benchmark writing hdd](./img/benchmark_write_hdd.png)
 - Writing and reading to **SSD**:
-[Benchmark writing ssd](./img/benchmark_write_ssd.png)
+![Benchmark writing ssd](./img/benchmark_write_ssd.png)
 
 Writing to **HDD** is about 30\% faster, which is surprising since we are
 dealing with **one file** only.
 
 - Copying `include` directory to **HDD**:
-[Benchmark copying hdd](./img/benchmark_copy_hdd.png)
+![Benchmark copying hdd](./img/benchmark_copy_hdd.png)
 - Copying `include` directory to **SSD**:
-[Benchmark copying ssd](./img/benchmark_copy_ssd.png)
+![Benchmark copying ssd](./img/benchmark_copy_ssd.png)
 
 The runtimes are virtually the same, which is not that surprising
 since in the lecture we were told that **HDD** in **_RAID_** can
