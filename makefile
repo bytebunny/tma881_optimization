@@ -14,7 +14,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 .PHONY: all
 all: time_sum mainfile separatefile inlined locality \
 	indirect_addressing_1 indirect_addressing_2 \
-	indirect_addressing_alt
+	indirect_addressing_alt write_hdd write_ssd
 
 # Rule to generate object files:
 # $(ODIR)/%.o: %.c $(DEPS)
@@ -49,6 +49,13 @@ $(ODIR)/indirect_addressing_2.o: indirect_addressing_2.c
 $(ODIR)/indirect_addressing_alt.o: indirect_addressing_alt.c 
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+## Writing to HDD and SSD
+$(ODIR)/write_hdd.o: write_hdd.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(ODIR)/write_ssd.o: write_ssd.c 
+	$(CC) -c -o $@ $< $(CFLAGS)
+
 
 time_sum: $(ODIR)/time_sum.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
@@ -77,9 +84,16 @@ indirect_addressing_2: $(ODIR)/indirect_addressing_2.o
 indirect_addressing_alt: $(ODIR)/indirect_addressing_alt.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+## Writing to HDD and SSD
+write_hdd: $(ODIR)/write_hdd.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+write_ssd: $(ODIR)/write_ssd.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 
 .PHONY: clean # Avoid conflict with a file of the same name
 clean:
 	rm -f $(ODIR)/*.o time_sum mainfile separatefile inlined \
 		  locality indirect_addressing_1 indirect_addressing_2 \
-		  indirect_addressing_alt $(IDIR)/*~
+		  indirect_addressing_alt write_hdd write_ssd $(IDIR)/*~

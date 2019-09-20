@@ -31,5 +31,10 @@ int main(){
 
   printf("Elapsed time: %.9lf msec.\n", t_elapsed*1e3);
 
+  free(x);
+  x = NULL;
+  free(y);
+  y = NULL;
+
   return(0);
 }
