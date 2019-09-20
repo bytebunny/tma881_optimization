@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 int main() {
   int * as;
@@ -11,5 +12,7 @@ int main() {
   for ( int ix = 0; ix < 10; ++ix )
     sum += as[ix];
   
+  printf("%d\n",sum);
+
   free(as);
 }

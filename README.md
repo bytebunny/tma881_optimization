@@ -17,6 +17,9 @@ Parametric study of **optimization flags**:
 Example of compilation to assembly code for `-O0`:
 `gcc time_sum.c -S -O0 -o time_sum_O0.s`
 
+Examination of assembly code suggests that high optimization levels (larger
+than 1) surpress the execution of the loop and print the result directly (value
+is already present in assembly code).
 
 ## Inlining
 Benchmarking of three programs when repeating multiplications 100,000 times
@@ -127,6 +130,8 @@ As a result, the **row** summation procedure is faster again:
 - Average (from 10,000) elapsed time of column summation: 0.476664307 msec.
 
 ### To-do list
+- [ ] Try to further improve the column summation by splitting it into blocks
+      (see lecture).
 - [ ] Try to see from the assembly code how the sequencing is done in the row and 
       column summation cases.
 
@@ -161,6 +166,8 @@ the pipeline and increasing the runtime.
 
 Writing to **HDD** is about 30\% faster, which is surprising since we are
 dealing with **one file** only.
+It turns out that when the information about the number of files to be copied is
+available to **_RAID_** controller, it can parallelize the procedure.
 
 - Copying `include` directory to **HDD**:
 ![Benchmark copying hdd](./img/benchmark_copy_hdd.png)
@@ -175,10 +182,18 @@ have larger bandwidth.
 ## Valgrind
 - `memcheck` of original program:
 ![Valgrind test](./img/valgrind_test.png)
-- No initialisation:
+We see that no errors is reported and that we allocated and freed space for
+10 integers (40 bytes) in memory.
+Interestingly, if one adds a **print** statement, there is another memory allocation
+taking place and the amount of memory allocated on the heap grows significantly:
+![Valgrind test print](./img/valgrind_test_print.png)
+
+- No initialisation (with `--track-origins=yes`):
 ![Valgrind test no init](./img/valgrind_test_no_init.png)
+
 - No freeing of memory:
 ![Valgrind test no free](./img/valgrind_test_no_free.png)
+
 - Double freeing of memory:
 ![Valgrind test double free](./img/valgrind_test_double_free.png)
 
