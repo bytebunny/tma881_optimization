@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS = -O2 -Wall -march=native
+CFLAGS = -O0 -Wall -march=native
 LIBS = -larb -lflint -lmpfr -lgmp -lpthread
 # Directory to keep object files:
 ODIR = obj
@@ -14,7 +14,9 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 .PHONY: all
 all: time_sum mainfile separatefile inlined locality \
 	indirect_addressing_1 indirect_addressing_2 \
-	indirect_addressing_alt write_hdd write_ssd
+	indirect_addressing_alt write_hdd write_ssd \
+	valgrind_test valgrind_test_no_init \
+	valgrind_test_no_free valgrind_test_double_free
 
 # Rule to generate object files:
 # $(ODIR)/%.o: %.c $(DEPS)
@@ -56,6 +58,20 @@ $(ODIR)/write_hdd.o: write_hdd.c
 $(ODIR)/write_ssd.o: write_ssd.c 
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+## Valgrind
+$(ODIR)/valgrind_test.o: valgrind_test.c 
+	$(CC) -c -o $@ $< -g $(CFLAGS)
+
+$(ODIR)/valgrind_test_no_init.o: valgrind_test_no_init.c 
+	$(CC) -c -o $@ $< -g $(CFLAGS)
+
+$(ODIR)/valgrind_test_no_free.o: valgrind_test_no_free.c 
+	$(CC) -c -o $@ $< -g $(CFLAGS)
+
+$(ODIR)/valgrind_test_double_free.o: valgrind_test_double_free.c 
+	$(CC) -c -o $@ $< -g $(CFLAGS)
+
+
 
 time_sum: $(ODIR)/time_sum.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
@@ -91,9 +107,24 @@ write_hdd: $(ODIR)/write_hdd.o
 write_ssd: $(ODIR)/write_ssd.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+## Valgrind
+valgrind_test: $(ODIR)/valgrind_test.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+valgrind_test_no_init: $(ODIR)/valgrind_test_no_init.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+valgrind_test_no_free: $(ODIR)/valgrind_test_no_free.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+valgrind_test_double_free: $(ODIR)/valgrind_test_double_free.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 
 .PHONY: clean # Avoid conflict with a file of the same name
 clean:
 	rm -f $(ODIR)/*.o time_sum mainfile separatefile inlined \
 		  locality indirect_addressing_1 indirect_addressing_2 \
-		  indirect_addressing_alt write_hdd write_ssd $(IDIR)/*~
+		  indirect_addressing_alt write_hdd write_ssd \
+		  valgrind_test valgrind_test_no_init \
+		  valgrind_test_no_free valgrind_test_double_free $(IDIR)/*~

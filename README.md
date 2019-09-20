@@ -170,3 +170,14 @@ dealing with **one file** only.
 The runtimes are virtually the same, which is not that surprising
 since in the lecture we were told that **HDD** in **_RAID_** can
 have larger bandwidth.
+
+
+## Valgrind
+- `memcheck` of original program:
+![Valgrind test](./img/valgrind_test.png)
+- No initialisation:
+![Valgrind test no init](./img/valgrind_test_no_init.png)
+- No freeing of memory:
+![Valgrind test no free](./img/valgrind_test_no_free.png)
+- Double freeing of memory:
+![Valgrind test double free](./img/valgrind_test_double_free.png)
