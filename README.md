@@ -186,7 +186,7 @@ have larger bandwidth.
 - Running `gdb invalid_access` gives:
 ![GDB start](./img/gdb_start.png)
 - Entering `focus src` followed by `p as` ouputs:
-![GDB start](./img/gdb_start.png)
+![GDB focus src](./img/gdb_focus_src.png)
 
 NOTE: if you need to pass arguments to your program you can invoke GDB with
 `gdb --args PROGRAM ARGS`.
