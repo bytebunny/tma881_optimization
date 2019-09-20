@@ -181,3 +181,25 @@ have larger bandwidth.
 ![Valgrind test no free](./img/valgrind_test_no_free.png)
 - Double freeing of memory:
 ![Valgrind test double free](./img/valgrind_test_double_free.png)
+
+## GDB
+- Running `gdb invalid_access` gives:
+![GDB start](./img/gdb_start.png)
+- Entering `focus src` followed by `p as` ouputs:
+![GDB start](./img/gdb_start.png)
+
+NOTE: if you need to pass arguments to your program you can invoke GDB with
+`gdb --args PROGRAM ARGS`.
+
+
+## Learing summary
+From the course web page<sup>[2](#myfootnote2)</sup>:
+> Like Assignment 0, this assignment is a preparation towards your working on Assignments 2 through 5. In particular, you will need the following to facilitate your course studies:
+> - From the first part, it is helpful to remember that reasonable benchmarking of small pieces of code can be achieved by running it sufficiently often and taking the average. Recall from the lecture that running code a single time incurs so many random effects that the result cannot be considered a benchmark.
+> - From the second part, it is useful to remember that inlining of code potentially speeds up a function. This is particularly true if the function is small. To explicitly suggest to the compiler that a function be inlined you can prepend the declaration with “static inline”.
+> - From the third part, it is useful to remember that locality can make a dramatic difference in runtime. To see this effect, it is really crucial here to run the code sufficiently often (at least 100000 times) when benchmarking.
+> - From the fourth part, it is useful to remember that indirect addressing always comes with extra cost. But that extra cost raises enormously when memory is accessed in a nonlinear way.
+> -From the fifth part, it is useful for future use beyond this course to remember that the advantage of SSD might be overcompensated by RAID.
+> - From the sixth and seventh part, it is useful to remember valgrind and GDB as efficient means to detect incorrect memory access. When you observe a segmentation fault in your program, one of the first steps to locate it should involve the use of valgrind and GDB.
+
+<a name="myfootnote2">2</a>: [TMA881 2019: Assignment 1](https://www.raum-brothers.eu/martin/Chalmers_TMA881_1920/assignments.html#optimization)

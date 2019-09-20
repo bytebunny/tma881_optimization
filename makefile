@@ -16,7 +16,8 @@ all: time_sum mainfile separatefile inlined locality \
 	indirect_addressing_1 indirect_addressing_2 \
 	indirect_addressing_alt write_hdd write_ssd \
 	valgrind_test valgrind_test_no_init \
-	valgrind_test_no_free valgrind_test_double_free
+	valgrind_test_no_free valgrind_test_double_free \
+	invalid_access
 
 # Rule to generate object files:
 # $(ODIR)/%.o: %.c $(DEPS)
@@ -71,6 +72,10 @@ $(ODIR)/valgrind_test_no_free.o: valgrind_test_no_free.c
 $(ODIR)/valgrind_test_double_free.o: valgrind_test_double_free.c 
 	$(CC) -c -o $@ $< -g $(CFLAGS)
 
+## GDB
+$(ODIR)/invalid_access.o: invalid_access.c 
+	$(CC) -c -o $@ $< -g $(CFLAGS)
+
 
 
 time_sum: $(ODIR)/time_sum.o
@@ -120,6 +125,10 @@ valgrind_test_no_free: $(ODIR)/valgrind_test_no_free.o
 valgrind_test_double_free: $(ODIR)/valgrind_test_double_free.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
+## GDB
+invalid_access: $(ODIR)/invalid_access.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 
 .PHONY: clean # Avoid conflict with a file of the same name
 clean:
@@ -127,4 +136,5 @@ clean:
 		  locality indirect_addressing_1 indirect_addressing_2 \
 		  indirect_addressing_alt write_hdd write_ssd \
 		  valgrind_test valgrind_test_no_init \
-		  valgrind_test_no_free valgrind_test_double_free $(IDIR)/*~
+		  valgrind_test_no_free valgrind_test_double_free \
+		  invalid_access $(IDIR)/*~
