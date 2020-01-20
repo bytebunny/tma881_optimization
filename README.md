@@ -103,7 +103,7 @@ for ( size_t ix=0; ix < nrs; ++ix ){
     sums[ix] = 0; // Initialize sum.
 
     for ( size_t jx=0; jx < ncs; ++jx )
-        sums[jx] += matrix[ix][jx];
+        sums[ix] += matrix[ix][jx];
 }
 ```
 This **breaks the pipeling** and the instructions are carried out sequentually!
